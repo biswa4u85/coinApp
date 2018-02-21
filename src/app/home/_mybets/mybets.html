@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-lg-6 col-sm-6 col-sm-6 col-xs-12 gameBox open">
+    <h4>{{ 'Open Bets' | translate }}</h4>
+
+    <ul class="gameTab">
+      <li (click)="openTabs('matched')" class="{{tabToggle['matched'] ? 'active' : 'deactive'}}">{{ 'Matched Bets' | translate }} ({{MyMBets}})
+      </li>
+      <li (click)="openTabs('unmatched')" class="{{tabToggle['unmatched'] ? 'active' : 'deactive'}}">{{ 'Unmatched Bets' | translate }} ({{MyUBets?.length}})</li>
+      <li *ngIf="tabToggle['matched']" matTooltip="Group Bets" class="consolidate">
+        <mat-checkbox (click)="checkConsolidate()" [(ngModel)]="consolidate">{{ 'Group' | translate }}</mat-checkbox>
+      </li>
+    </ul>
+
+    <div *ngIf="tabToggle['matched']" class="{{tabToggle['matched'] ? 'active' : 'deactive'}}">
+      <div *ngIf="tempMyMBets?.length != 0" class="dtTable">
+        <ng2-smart-table [settings]="matchUnmatchSettings" [source]="MyMBetsDtable"></ng2-smart-table>
+      </div>
+    </div>
+
+    <div *ngIf="tabToggle['unmatched']" class="{{tabToggle['unmatched'] ? 'active' : 'deactive'}}">
+      <div *ngIf="MyUBets?.length != 0" class="openReport">
+        <ng2-smart-table [settings]="matchUnmatchSettings" [source]="MyUBetsDtable"></ng2-smart-table>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-lg-6 col-sm-6 col-sm-6 col-xs-12 settled">
+    <h4>{{ 'Settled Bets' | translate }}</h4>
+    <div class="inner">
+      <div class="loadingBg" *ngIf="loading">
+        <div class="loaderInner">
+          <img src="./assets/images/homeLoader.gif" />
+        </div>
+      </div>
+      <form [formGroup]="settledForm" (ngSubmit)=onSubmitBetsReport(settledForm.value) novalidate>
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+            <ng2-datepicker [options]="optionsFrom" placeholder="Choose a date" formControlName="from"></ng2-datepicker>
+          </div>
+
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+            <ng2-datepicker class="rightDtPick" [options]="optionsTo" placeholder="Choose a date" formControlName="to"></ng2-datepicker>
+          </div>
+
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <button type="submit" [disabled]="!settledForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }}</button>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div *ngIf="settledBets?.length != 0" class="dtTable">
+            <ng2-smart-table [settings]="matchUnmatchSettings" [source]="settledBetsDtable"></ng2-smart-table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="fancyBoardBg scrollbar" id="style-6">
+  <div class="fancyBoard">
+    <div *ngFor="let mItem of allGames">
+      <ul class="fancyBoardBody">
+        <li>
+          <span (click)="openFancy(mItem.groupById)" class="teamName">{{mItem.event.name}}</span>
+          <div *ngIf="subItemId === mItem.groupById" class="listBox">
+
+            <div class="row header">
+                <div *ngIf="subItemLoading" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <p align="center">
+                      <img width="50" height="50" src="./assets/images/homeLoader.gif" />
+                    </p>
+                  </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <ul class="innerList">
+                  <li *ngFor="let item of subItem">    
+                    <span class="addFancy" (click)="addFancyLotus(item.groupById,item.id,mItem.id,item.name)">Add</span>                
+                    <span class="subTeamName">{{item.name}}</span>                    
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <ul class="innerList">
+                  <li *ngFor="let item of subItem">  
+                    <span class="addFancy" (click)="addFancyLotus(item.groupById,item.id,mItem.id,item.name)">Remove</span>                  
+                    <span class="subTeamName">{{item.name}}</span>                    
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

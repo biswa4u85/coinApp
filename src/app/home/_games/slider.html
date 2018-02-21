@@ -1,0 +1,37 @@
+<div *ngIf="type === 'unmatched' && UBets.length !== 0">
+  <button class="leftArrow" color="primary" [disabled]="leftNavDisabled" (click)="moveLeft()">
+    <i class="material-icons">keyboard_arrow_left</i>
+  </button>
+  <button class="rightArrow" color="primary" [disabled]="rightNavDisabled" (click)="moveRight()">
+    <i class="material-icons">keyboard_arrow_right</i>
+  </button>
+  <div drag-scroll drag-scroll-y-disabled="true" scrollbar-hidden="true" (reachesLeftBound)="leftBoundStat($event)" (reachesRightBound)="rightBoundStat($event)"
+    #nav>
+    <div style="display:inline-block" matTooltip="{{item.time | utcfilter}}" class="item  {{(item.type == 'l' || item.type == 'No') ? 'layColor' : 'backColor'}}"
+      *ngFor="let item of UBets; trackBy:trackByBetId; let i = index">
+      <div class="slideBox">
+        <span class="slideBoxText">{{item.stake}} @ {{item.odds}}</span>
+        <i matTooltip="Cancel Bet" (click)="cancelBets(item.id)" class="material-icons">indeterminate_check_box</i>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="type === 'matched' && MBets.length !== 0">
+  <button class="leftArrow" color="primary" [disabled]="leftNavDisabled" (click)="moveLeft()">
+    <i class="material-icons">keyboard_arrow_left</i>
+  </button>
+  <button class="rightArrow" color="primary" [disabled]="rightNavDisabled" (click)="moveRight()">
+    <i class="material-icons">keyboard_arrow_right</i>
+  </button>
+  <div drag-scroll drag-scroll-y-disabled="true" scrollbar-hidden="true" (reachesLeftBound)="leftBoundStat($event)" (reachesRightBound)="rightBoundStat($event)"
+    #nav>
+    <div style="display:inline-block" matTooltip="{{item.time | utcfilter}}" class="item  {{(item.type == 'l' || item.type == 'No') ? 'layColor' : 'backColor'}}"
+      *ngFor="let item of MBets; trackBy:trackByBetId; let i = index">
+      <div class="slideBox">
+        <span class="slideBoxText">{{item.stake}} @ {{item.odds}}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+<div *ngIf="oddsDetail" class="row betBox">
+  <div class="col-lg-12 oddBets">
+    <div id="odds_status_{{gameDetails.game_id}}"></div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8"></div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-8 col-md-offset-8 col-sm-offset-8">
+            <span class="backTitle">{{gameDetails.game_type == -8 ? 'No' : 'Back'}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-right-8 col-md-offset-right-8 col-sm-offset-right-8">
+            <span class="layTitle">{{gameDetails.game_type == -8 ? 'Yes' : 'Lay'}}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row" *ngFor="let itom of oddsDetail; let parentIndex = index;">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 teamName">
+        <h4>{{itom.gselname}}</h4>
+        <h5 *ngIf="errorMsg == ''">
+          <span class="{{(bookDetails.own[itom.gselid] >= 0) ? 'positive' : 'negative' }}">{{bookDetails.own[itom.gselid]}}</span>
+        </h5>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 teamVal">
+        <div>
+          <span matTooltip="Matched Bets" *ngIf="adminService.getBets(itom.gselid).length != 0" matTooltip="Matched Bets" id="match_{{itom.gselid}}"
+            class="black" [innerHTML]="adminService.getBets(itom.gselid).length"></span>
+          <span matTooltip="Unmatched Bets" *ngIf="adminService.getUBets(itom.gselid).length != 0" matTooltip="Unmatched Bets" id="unmatch_{{itom.gselid}}"
+            class="red" [innerHTML]="adminService.getUBets(itom.gselid).length"></span>
+        </div>
+      </div>
+
+      <div *ngIf="deviceInfo == 'destopView'" class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div *ngIf="gameDetails.game_type != -8" class="row backBox">
+          <div class="col-lg-4 col-md-4 col-sm-4" *ngFor="let i of oddBox">
+            <a>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_{{i}}_price" class="betTitle"></span>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_{{i}}_amount"></span>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="gameDetails.game_type == -8" class="row backBox">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span class="betTitle"></span>
+              <span></span>
+            </a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span class="betTitle"></span>
+              <span></span>
+            </a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_2_price" class="betTitle"></span>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_2_amount"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="deviceInfo == 'destopView'" class="col-lg-3 col-md-3 col-sm-3  col-xs-2">
+        <div *ngIf="gameDetails.game_type != -8" class="row layBox">
+          <div class="col-lg-4 col-md-4 col-sm-4" *ngFor="let i of oddBox">
+            <a>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_{{i}}_price" class="betTitle"></span>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_{{i}}_amount"></span>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="gameDetails.game_type == -8" class="row layBox">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_0_price" class="betTitle"></span>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_0_amount"></span>
+            </a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span class="betTitle"></span>
+              <span></span>
+            </a>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span class="betTitle"></span>
+              <span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="deviceInfo == 'mobileView'" class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row backBox">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_2_price" class="betTitle"></span>
+              <span id="backPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_2_amount"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="deviceInfo == 'mobileView'" class="col-lg-3 col-md-3 col-sm-3  col-xs-2">
+        <div class="row layBox">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <a>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_0_price" class="betTitle"></span>
+              <span id="layPrices_{{gameDetails.game_id}}_{{itom.gselid_bf}}_0_amount"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <ng-template *ngFor="let i of oddBox" [ngIf]="currentBet == 'bet_' + parentIndex + i + itom.gselid_bf" class="col-lg-12 col-md-12 col-sm-12">
+        <app-bet (currentBet)="getCloseBet($event)" [betDetails]=betDetails></app-bet>
+      </ng-template>
+
+    </div>
+  </div>
+  <div class="col-lg-12 books">
+    <h3 (click)="openBookFun()">Books
+      <span class="pull-right">{{openBook ? '+' : '-'}}</span>
+    </h3>
+    <div *ngIf="!openBook">
+      <div *ngIf="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
+      <table border="0" cellpadding="0" cellspacing="0" class="" width="100%" *ngIf="bookDetails">
+        <tbody>
+          <tr>
+            <th>User</th>
+            <th *ngFor="let itemList of bookDetails.selections">{{itemList}}</th>
+          </tr>
+          <tr>
+            <td>Parent</td>
+            <td *ngFor="let key of objectKeys(bookDetails.parent)" class="text-right {{bookDetails.parent[key] >= 0 ? 'positive' : 'negative'}}">{{bookDetails.parent[key]}}</td>
+          </tr>
+          <!-- <tr>
+          <td>Own</td>
+          <td *ngFor="let key of objectKeys(bookDetails.own)" class="text-right {{bookDetails.own[key] >= 0 ? 'positive' : 'negative'}}">{{bookDetails.own[key]}}</td>
+        </tr> -->
+          <tr *ngFor="let item of bookDetails.users">
+            <td>{{item.name}}</td>
+            <td *ngFor="let key of objectKeys(item.selections)" class="text-right {{item.selections[key] >= 0 ? 'positive' : 'negative'}}">{{item.selections[key].toFixed(2)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Option Template -->
+<ng-template #templateBook>
+  <div class="header">
+    <button matTooltip="Close" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+    <h4>{{ 'Book Details' | translate }}</h4>
+  </div>
+  <div class="modal-body optionSection">
+    <admin-book [gId]="gId"></admin-book>
+  </div>
+</ng-template>

@@ -1,0 +1,226 @@
+<div *ngIf="deviceInfo == 'destopView'" class="row betBox">
+  <div class="col-lg-6 oddBets">
+    <div id="odds_status_{{gameDetails.gameId}}"></div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
+        <div class="">
+          <div class="timeClock">
+            <span id="odds_timer_{{gameDetails.gameId}}"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-8 col-md-offset-8 col-sm-offset-8">
+            <span class="backTitle">Back</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-right-8 col-md-offset-right-8 col-sm-offset-right-8">
+            <span class="layTitle">Lay</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row" *ngFor="let itom of oddsDetail; let parentIndex = index;">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 teamName">
+        <h4>{{itom.gselname}}</h4>
+        <h5>
+          <span *ngIf="getProfit[itom.gselid] !=0" class="{{getProfit[itom.gselid] >= 0 ? 'positive' : 'negative' }}" [innerHTML]="getProfit[itom.gselid]"></span>
+          <span *ngIf="getProfit[itom.gselid] && getTempProfitVal(itom.gselid)">>></span>
+          <span class="{{getTempProfitVal(itom.gselid) >= 0 ? 'positive' : 'negative' }}" [innerHTML]="getTempProfitVal(itom.gselid)"></span>
+        </h5>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 teamVal">
+        <div>
+          <div>
+            <!-- {{MBets[itom.selid]}} -->
+            <span matTooltip="Matched Bets" *ngIf="MBets(itom.gselid) != 0" (click)="openTabs('matched')" class="black" [innerHTML]="MBets(itom.gselid)"></span>
+            <span matTooltip="Unmatched Bets" *ngIf="UBets(itom.gselid) != 0" (click)="openTabs('unmatched')" class="red" [innerHTML]="UBets(itom.gselid)"></span>
+            <!-- <span *ngIf="(UBets[itom.selid]) && (UBets[itom.selid].length != 0)" (click)="openTabs('unmatched')" class="red" [innerHTML]="UBets[itom.selid].length"></span> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+        <div class="row backBox">
+          <div class="col-lg-4 col-md-4 col-sm-4 {{matchOdds['backPrices_'+parentIndex+'_'+i] ? 'backShadow' : ''}}" *ngFor="let i of oddBox">
+            <a class="" (click)="openBets('backPrices_',parentIndex, i, itom);">
+              <span id="backPrices_{{gameDetails.gameId}}_{{itom.gselid_bf}}_{{i}}_price" class="betTitle"></span>
+              <span id="backPrices_{{gameDetails.gameId}}_{{itom.gselid_bf}}_{{i}}_amount"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3  col-xs-2">
+        <div class="row layBox">
+          <div class="col-lg-4 col-md-4 col-sm-4 {{matchOdds['layPrices_'+parentIndex+'_'+i] ? 'layShadow' : ''}}" *ngFor="let i of oddBox">
+            <a class="" (click)="openBets('layPrices_',parentIndex, i, itom);">
+              <span id="layPrices_{{gameDetails.gameId}}_{{itom.gselid_bf}}_{{i}}_price" class="betTitle"></span>
+              <span id="layPrices_{{gameDetails.gameId}}_{{itom.gselid_bf}}_{{i}}_amount"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <ng-template *ngFor="let i of oddBox" [ngIf]="currentBet == 'bet_' + parentIndex + i + itom.gselid_bf" class="col-lg-12 col-md-12 col-sm-12">
+        <app-bet class="{{betDetails.bType == 'backPrices_' ? 'backPricesBg' : 'layPricesBg' }}" (currentBet)="getCloseBet($event)"
+          [betDetails]=betDetails></app-bet>
+      </ng-template>
+    </div>
+  </div>
+  <div class="col-lg-6 slideBets">
+    <ul class="gameTab tabbing">
+      <li (click)="openTabs('matched')" class="{{tabToggle['matched'] ? 'active' : 'deactive'}}">{{ 'Matched Bets' | translate }}</li>
+      <li (click)="openTabs('unmatched')" class="{{tabToggle['unmatched'] ? 'active' : 'deactive'}}">{{ 'Unmatched Bets' | translate }}</li>
+      <li *ngIf="tabToggle['matched']" class="consolidate">
+        <mat-checkbox matTooltip="Group Bets" [(ngModel)]="consolidate">{{ 'Group' | translate }}</mat-checkbox>
+      </li>
+    </ul>
+    <div class="{{tabToggle['matched'] ? 'slideBets active' : 'deactive'}}">
+      <ng-container>
+        <div *ngFor="let itom of oddsDetail; let i = index;">
+          <div class="betsBox">
+            <app-slider [consolidate]="consolidate" [eventId]="gameDetails.eventId" [gameId]="gameDetails.gameId" [gSelid]="itom.gselid"
+              [type]="'matched'"></app-slider>
+          </div>
+          <div *ngIf="matchOddsSideBar[i]" class="matchOdds {{matchOddsSideBar[i] ? matchOddsSideBar[i].name : ''}}">
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="{{tabToggle['unmatched'] ? 'slideBets active' : 'deactive'}}">
+      <ng-container>
+        <div *ngFor="let itom of oddsDetail; let i = index;">
+          <div class="betsBox">
+            <app-slider [eventId]="gameDetails.eventId" [gameId]="gameDetails.gameId" [gSelid]="itom.gselid" [type]="'unmatched'"></app-slider>
+          </div>
+          <div *ngIf="matchOddsSideBar[i]" class="matchOdds {{matchOddsSideBar[i] ? matchOddsSideBar[i].name : ''}}">
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="deviceInfo == 'mobileView'" class="betBox">
+  <ul class="gameTab">
+    <li (click)="openTabs('game')" class="{{tabToggle['game'] ? 'active' : 'deactive'}}">{{gameDetails.marketName}}</li>
+    <li (click)="openTabs('matched')" class="{{tabToggle['matched'] ? 'active' : 'deactive'}}">{{ 'Matched Bets' | translate }}</li>
+    <li (click)="openTabs('unmatched')" class="{{tabToggle['unmatched'] ? 'active' : 'deactive'}}">{{ 'Unmatched Bets' | translate }}</li>
+    <li *ngIf="tabToggle['matched']" class="consolidate">
+      <mat-checkbox matTooltip="Group Bets" [(ngModel)]="consolidate">{{ 'Group' | translate }}</mat-checkbox>
+    </li>
+  </ul>
+  <div *ngIf="tabToggle['game']" class="{{tabToggle['game'] ? 'active' : 'deactive'}}">
+    <div class="oddBets">
+      <div id="odds_status_{{gameDetails.gameId}}"></div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
+          <div class="clock {{clockStatus}}">
+            <div class="timeClock">
+              <span id="odds_timer_{{gameDetails.gameId}}"></span>
+            </div>
+            <div class="cup top">
+              <div class="sand"></div>
+            </div>
+            <div class="cup">
+              <div class="sand delayed"></div>
+            </div>
+          </div>
+        </div>
+
+        <p *ngIf="favoriteGames" matTooltip="Favorite Game" (click)="favoriteTogel(gameDetails.gameId)" class="favGame active">
+          <i class="material-icons">{{favoriteGames[gameDetails.gameId] ? 'star' : 'star_border'}}</i>
+        </p>
+        <!-- <div class="favGame active commentaryBut" *ngIf="gameDetails.gameType == 4">
+                  <span matTooltip="Voice On" class="" (click)="libraryService.setVoice(gameDetails.gameId)">
+                    <i class="material-icons">{{libraryService.getVoice() === gameDetails.gameId ? 'volume_up' : 'volume_off'}}</i>
+                  </span>
+                </div> -->
+        <div class="favGame active commentaryBut" *ngIf="gameDetails.gameType != 7">
+          <span matTooltip="Tv On" class="" (click)="libraryService.setTv(gameDetails.gameId)">
+            <i class="material-icons">{{libraryService.getTv() === gameDetails.gameId ? 'videocam' : 'videocam_off'}}</i>
+          </span>
+        </div>
+        <div class="commentary">
+          <div *ngIf="gameDetails.gameType == 4">
+            <h4 *ngIf="libraryService.getVoice() === gameDetails.gameId" class="none" [innerHTML]="libraryService.commentaryVoice(libraryService.getCommentryTotalVal(gameDetails.marketId))"></h4>
+            <span *ngIf="libraryService.getCommentryTotalVal(gameDetails.marketId)" class="commentaryText" [innerHTML]="libraryService.getCommentryTotalVal(gameDetails.marketId)"></span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <span class="backTitle">Back</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <span class="layTitle">Lay</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="{{(homeService.getMobileTabActive() == item.gselid+'act_0' || homeService.getMobileTabActive() == item.gselid+'act_2') ? 'mobActiveRow' : '' }}"
+        *ngFor="let item of oddsDetail; let parentIndex = index;">
+        <div class="row tornLightActive">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 teamName">
+            <h4>{{item.gselname}}</h4>
+            <h5>
+              <span *ngIf="getProfit[item.gselid] !=0" class="{{getProfit[item.gselid] >= 0 ? 'positive' : 'negative' }}" [innerHTML]="getProfit[item.gselid]"></span>
+              <span *ngIf="getProfit[item.gselid] && getTempProfitVal(item.gselid)">>></span>
+              <span class="{{getTempProfitVal(item.gselid) >= 0 ? 'positive' : 'negative' }}" [innerHTML]="getTempProfitVal(item.gselid)"></span>
+            </h5>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 teamVal">
+            <div>
+              <span matTooltip="Matched Bets" *ngIf="MBets(item.gselid) != 0" (click)="openTabs('matched')" class="black" [innerHTML]="MBets(item.gselid)"></span>
+              <span matTooltip="Unmatched Bets" *ngIf="UBets(item.gselid) != 0" (click)="openTabs('unmatched')" class="red" [innerHTML]="UBets(item.gselid)"></span>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-2">
+            <div class="row backBox {{(homeService.getMobileTabActive() == item.gselid+'act_2') ? '' : 'mobDeActive' }}" id="element_{{gameDetails.gameId}}_{{item.gselid}}">
+              <div class="col-lg-4 col-md-4 col-sm-4 {{matchOdds['backPrices_'+parentIndex+'_'+'2'] ? 'backShadow' : ''}}">
+                <a class="" (click)="openBets('backPrices_',parentIndex, '2', item);">
+                  <span id="backPrices_{{gameDetails.gameId}}_{{item.gselid_bf}}_2_price" class="betTitle"></span>
+                  <span id="backPrices_{{gameDetails.gameId}}_{{item.gselid_bf}}_2_amount"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-3  col-xs-2">
+
+            <div class="row layBox {{(homeService.getMobileTabActive() == item.gselid+'act_0') ? '' : 'mobDeActive' }}" id="element_{{gameDetails.gameId}}_{{item.gselid}}">
+              <div class="col-lg-4 col-md-4 col-sm-4 {{matchOdds['layPrices_'+parentIndex+'_'+'0'] ? 'layShadow' : ''}}">
+                <a class="" (click)="openBets('layPrices_',parentIndex, '0', item);">
+                  <span id="layPrices_{{gameDetails.gameId}}_{{item.gselid_bf}}_0_price" class="betTitle"></span>
+                  <span id="layPrices_{{gameDetails.gameId}}_{{item.gselid_bf}}_0_amount"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- <ng-template *ngFor="let i of oddBox" [ngIf]="currentBet == 'bet_' + parentIndex + i + item.gselid_bf" class="col-lg-12 col-md-12 col-sm-12">
+                      <app-shortbet class="{{betDetails.bType == 'backPrices_' ? 'backPricesBg' : 'layPricesBg' }}" (currentBet)="getCloseBet($event)"
+                          (currentBet)="getCloseBet($event)" [betDetails]=betDetails></app-shortbet>
+                  </ng-template> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="tabToggle['matched']" class="{{tabToggle['matched'] ? 'slideBets active' : 'deactive'}}">
+    <div *ngFor="let item of oddsDetail;" class="betsBox">
+      <app-slider [consolidate]="consolidate" [eventId]="gameDetails.eventId" [gameId]="gameDetails.gameId" [gSelid]="item.gselid"
+        [type]="'matched'"></app-slider>
+    </div>
+  </div>
+
+  <div *ngIf="tabToggle['unmatched']" class="{{tabToggle['unmatched'] ? 'slideBets active' : 'deactive'}}">
+    <div *ngFor="let item of oddsDetail;" class="betsBox">
+      <app-slider [eventId]="gameDetails.eventId" [gameId]="gameDetails.gameId" [gSelid]="item.gselid" [type]="'unmatched'"></app-slider>
+    </div>
+  </div>
+</div>

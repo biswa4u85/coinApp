@@ -1,0 +1,193 @@
+<mat-sidenav-container [attr.data-color]="theme" class="home-container {{deviceInfo}}">
+  <mat-sidenav #sidenav class="home-sidenav leftSlider">
+    <div class="row userBox">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 photo">
+        <img src="../../assets/images/user-logo.png" />
+      </div>
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 blns">
+        <ul class="nav">
+          <li>{{ 'Name:' | translate }}
+            <span class="digitAlign name">{{currentUser}}</span>
+          </li>
+          <li>{{ 'Balance:' | translate }}
+            <span class="digitAlign">{{balance}}</span>
+          </li>
+          <li>{{ 'Exposure:' | translate }}
+            <span class="digitAlign">{{exposure}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <mat-slide-toggle [(ngModel)]="inPlay" class="slideToggle">{{ 'In-Play' | translate }}</mat-slide-toggle>
+    <mat-form-field class="full-width">
+      <input type="text" matInput placeholder="{{ 'Search Game...' | translate }}" [(ngModel)]="searchGame">
+    </mat-form-field>
+    <accordion [closeOthers]="!searchGame">
+      <accordion-group heading="Favorite  ({{(favGames | filterBy: filterFavId | inPlayfilter: 'game_inplay' : false).length}})"
+        [isOpen]="searchGame">
+        <ul>
+          <li href="#" *ngFor="let itomLabTwo of favGames | filterBy: filterFavId | inPlayfilter: 'game_inplay' : inPlay">
+            <span *ngIf="itomLabTwo.game_inplay" class="pull-right">{{ 'InPlay' | translate }}</span>
+            <a (click)="openGameFromTree(itomLabTwo.game_id)">{{itomLabTwo.game_name}}</a>
+          </li>
+        </ul>
+      </accordion-group>
+      <div class="loadingBg" *ngIf="gameStatus">
+        <div class="loaderInner">
+          <img src="./assets/images/homeLoader.gif" />
+        </div>
+      </div>
+      <accordion-group [isOpen]="searchGame" *ngFor="let itomLabOne of allGames; trackBy:idToTrackCategoriesWith" heading="{{itomLabOne.cat_name}}  ({{itomLabOne.data.length}})">
+        <ul>
+          <li href="#" *ngFor="let itomLabTwo of itomLabOne.data  | filterBy: { game_name: searchGame } | inPlayfilter: 'game_inplay' : inPlay; trackBy:idToTrackGamesWith">
+            <a (click)="openGameFromTree(itomLabTwo.game_id);">{{itomLabTwo.game_name}}</a>
+            <span class="bookButt pull-right" *ngIf="itomLabTwo.book.length !=0">
+              <button matTooltip="Books" mat-icon-button [matMenuTriggerFor]="bookMenu">
+                <mat-icon>book</mat-icon>
+              </button>
+              <mat-menu #bookMenu="matMenu">
+                <button mat-menu-item *ngFor="let item of itomLabTwo.book;">
+                  <span>{{item.sel_name}} ({{item.pl}})</span>
+                </button>
+              </mat-menu>
+            </span>
+            <span *ngIf="itomLabTwo.game_inplay" class="inplayGame pull-right">{{ 'InPlay' | translate }}</span>
+          </li>
+        </ul>
+      </accordion-group>
+    </accordion>
+  </mat-sidenav>
+  <div class="home-content">
+    <div class="row header" (mouseout)="mobilemenu=false">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="pull-left">
+          <ul class="topNav leftSmilMenu text-right">
+            <li class="pull-left" matTooltip="Open Games" (click)="getGamesNew();sidenav.open();">
+              <i class="material-icons">reorder</i>
+            </li>
+            <li class="logo pull-left">{{ 'Games' | translate }}</li>
+          </ul>
+        </div>
+        <div class="slimMenu pull-right">
+          <button (click)="mobilemenu=!mobilemenu">
+            <i class="material-icons">more_horiz</i>
+          </button>
+        </div>
+        <div class="pull-right mobMenu {{mobilemenu ? 'active' : 'inactive'}}">
+          <ul class="topMenu text-right">
+            <li matTooltip="My Bets" (click)="isCollapsedMyBets = !isCollapsedMyBets;">
+              <i class="material-icons">account_balance_wallet</i>
+            </li>
+            <li matTooltip="Report" (click)="isCollapsedReport = !isCollapsedReport">
+              <i class="material-icons">receipt</i>
+            </li>
+            <li matTooltip="Options" (click)="openModal(template)">
+              <i class="material-icons">settings</i>
+            </li>
+            <li matTooltip="Logout">
+              <a href="/login">
+                <i class="material-icons">power_settings_new</i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="pull-right">
+          <ul class="topNav text-right">
+            <!-- <li *ngIf="deviceInfo != 'mobileView'" matTooltip="Game View" class="gameView">
+              <mat-slide-toggle [(ngModel)]="longHome" (change)="longHomeVal()" class="slideToggle"></mat-slide-toggle>
+            </li> -->
+            <li matTooltip="Refresh">
+              <a href="/">
+                <i class="material-icons">autorenew</i>
+              </a>
+            </li>
+            <li *ngIf="betOptions">
+              <button matTooltip="Bet Type" mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon *ngIf="betOptions == 'oneclick'">airplanemode_active</mat-icon>
+                <mat-icon *ngIf="betOptions == 'confirm'">done_all</mat-icon>
+                <mat-icon *ngIf="betOptions == 'normal'">notifications_off</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button (click)="changeBet('confirm')" mat-menu-item>
+                  <mat-icon>done_all</mat-icon>
+                  <span>{{ 'Confirm Bet(Y/N)' | translate }}</span>
+                </button>
+                <button (click)="changeBet('normal')" mat-menu-item>
+                  <mat-icon>notifications_off</mat-icon>
+                  <span>{{ 'Normal Bet(N)' | translate }}</span>
+                </button>
+              </mat-menu>
+            </li>
+            <li class="balance" (click)="totalBalance()">
+              <div matTooltip="Balance">B:
+                <span>{{balance}}</span>
+              </div>
+              <div matTooltip="Exposure">E:
+                <span>{{exposure}}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 contain-area">
+        <!-- Option Template -->
+        <ng-template #template>
+          <div class="header">
+            <button matTooltip="Close" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <mat-icon aria-hidden="true">close</mat-icon>
+            </button>
+            <h4>{{ 'Preferences' | translate }}</h4>
+          </div>
+          <div class="modal-body optionSection">
+            <app-options></app-options>
+          </div>
+        </ng-template>
+        <!-- My Bets Template -->
+        <div (collapsed)="collapsed($event)" (expanded)="expanded($event)" [collapse]="isCollapsedMyBets" class="modal-content reportBg">
+          <div class="header">
+            <button matTooltip="Close" type="button" class="close pull-right" (click)="isCollapsedMyBets = !isCollapsedMyBets">
+              <mat-icon>close</mat-icon>
+            </button>
+            <h4>{{ 'My Bets Panel' | translate }}</h4>
+          </div>
+          <div *ngIf="!isCollapsedMyBets" class="modal-body mybetSection">
+            <app-mybets [isCollapsedMyBets]="!isCollapsedMyBets"></app-mybets>
+          </div>
+        </div>
+        <!-- Report Template -->
+        <div (collapsed)="collapsed($event)" (expanded)="expanded($event)" [collapse]="isCollapsedReport" class="modal-content reportBg">
+          <div class="header">
+            <button matTooltip="Close" type="button" class="close pull-right" (click)="isCollapsedReport = !isCollapsedReport">
+              <mat-icon>close</mat-icon>
+            </button>
+            <h4>{{ 'Report Panel' | translate }}</h4>
+          </div>
+          <div *ngIf="!isCollapsedReport" class="modal-body reportSection">
+            <app-report [isCollapsedReport]="!isCollapsedReport"></app-report>
+          </div>
+        </div>
+
+        <!-- Games -->
+        <div id="turnOnLight">
+          <!-- <div class="liveTV">
+            <h4 (click)="liveTVTogel()">
+              <span class="pull-right">{{liveTV ? '-' : '+'}}</span>Live Tv Streaming</h4>
+            <div *ngIf="liveTV">
+ 
+            </div>
+          </div> -->
+          <div *ngIf="deviceInfo == 'mobileView'" class="tornLight" id="tornLight" (click)="homeService.setMobileTabActive('')"></div>
+          <div *ngFor="let item of this.sharedGameDetails.currentActiveEvents;  let i = index">
+            <app-games (closeGameEmitter)="getCloseGame($event)" [gameDetailListObject]="this.sharedGameDetails.currentActiveGamesEventWise[item]"></app-games>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</mat-sidenav-container>
+<div *ngIf="deviceInfo == 'mobileView'">
+  <app-keyboard [betDetails]="this.homeService.getPlaceBetValue()"></app-keyboard>
+</div>

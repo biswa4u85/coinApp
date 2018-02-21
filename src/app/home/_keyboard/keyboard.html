@@ -1,0 +1,77 @@
+<div *ngIf="(detailsVal | json) != '{}' && homeService.getMobileTabActive() != ''" class="mobileView">
+  <div *ngIf="betOptions != 'oneclick'" class="expandBetBox  {{detailsVal.bType}} {{betDetails.type == -8 ? 'lineGame' : ''}}">
+
+    <div *ngIf="loading" class="loadingBg">
+      <div class="loaderInner">
+        <img src="./assets/images/homeLoader.gif" />
+      </div>
+    </div>
+
+    <h3>{{detailsVal.game_name}} -> {{detailsVal.selectName}}</h3>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 betIncrese">
+        <!-- <h4 *ngIf="deviceInfo === 'mobileView' && betDetails.type !== '-8'" class="none" [innerHTML]="setTempProfitVal()"></h4> -->
+        <form [formGroup]="betForm" (ngSubmit)=onSubmitBet(betForm.value) novalidate>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <a (click)="decVal('odds')">
+                <i class="material-icons">indeterminate_check_box</i>
+              </a>
+              <input [readonly]="true" class="{{textBoxName == 'oddsVal' ? 'activeTxtBox' : ''}}" type="text" (click)="openKeyBoard('oddsVal')"
+                formControlName="oddsVal">
+              <a (click)="incVal('odds')">
+                <i class="material-icons">add_box</i>
+              </a>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <a (click)="decVal( 'stake')">
+                <i class="material-icons">indeterminate_check_box</i>
+              </a>
+              <input [readonly]="true" class="{{textBoxName == 'stakeVal' ? 'activeTxtBox' : ''}}" type="text" (click)="openKeyBoard('stakeVal')"
+                formControlName="stakeVal">
+              <a (click)="incVal('stake')">
+                <i class="material-icons">add_box</i>
+              </a>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 activeKeyBoard mobileKeyboard">
+              <ul class="lftLine">
+                <li (click)="changeStake(quickStake1)">{{quickStake1}}</li>
+                <li (click)="changeStake(quickStake2)">{{quickStake2}}</li>
+                <li (click)="changeStake(quickStake3)">{{quickStake3}}</li>
+                <li (click)="closeBet()">Cancel</li>
+              </ul>
+              <ul class="topLines">
+                <li (click)="keyboard('1')">1</li>
+                <li (click)="keyboard('2')">2</li>
+                <li (click)="keyboard('3')">3</li>
+                <li (click)="keyboard('4')">4</li>
+                <li (click)="keyboard('5')">5</li>
+                <li (click)="keyboard('6')">6</li>
+                <li (click)="keyboard('7')">7</li>
+                <li (click)="keyboard('8')">8</li>
+                <li (click)="keyboard('9')">9</li>
+                <ul class="bottLine">
+                  <li (click)="keyboard('.')">.</li>
+                  <li (click)="keyboard('00')">00</li>
+                  <li (click)="keyboard('0')">0</li>
+                  <li (click)="keyboardBack()">
+                    <i class="material-icons">keyboard_backspace</i>
+                  </li>
+                </ul>
+              </ul>
+              <ul class="rtLine">
+                <li (click)="changeStake(quickStake4)">{{quickStake4}}</li>
+                <li (click)="changeStake(quickStake5)">{{quickStake5}}</li>
+                <li (click)="changeStake(quickStake6)">{{quickStake6}}</li>
+                <li class="placeButton">
+                  <button [disabled]="loading" class="placeSml">{{ 'Place' | translate }}</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

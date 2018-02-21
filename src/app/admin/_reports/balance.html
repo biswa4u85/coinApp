@@ -1,0 +1,78 @@
+<div class="gameBox">
+  <mat-tab-group [selectedIndex]="selectedTab" class="gameTabBl">
+
+    <mat-tab label="{{ 'Deposit' | translate }}">
+      <div class="demo-tab-content">
+        <!-- Deposit -->
+        <form [formGroup]="depositForm" (ngSubmit)=onSubmitDepositForm(depositForm.value) novalidate>
+          <div class="inner">
+            <div class="row">
+
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 widPad">
+                <mat-form-field class="full-width">
+                  <input type="number" matInput placeholder="{{ 'Amount' | translate }}" formControlName="mod_user_deposit_amt">
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <mat-form-field class="full-width">
+                  <input type="text" matInput placeholder="{{ 'Remarks' | translate }}" formControlName="mod_user_deposit_remark">
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <ng-select [options]="cashDepositList" formControlName="mod_user_cash_deposit" class="full-width" placeholder="Choose Option"></ng-select>
+                <span class="errorMessage">Select any or default settlement a/c</span>
+              </div>
+
+
+
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button type="submit" [disabled]="!depositForm.valid || loading" class="btn btn-success full-width depositButt" mat-raised-button>{{ 'Deposit' | translate }}
+                  <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="{{ 'Withdraw' | translate }}">
+      <div class="demo-tab-content">
+        <!-- Withdraw -->
+        <form [formGroup]="withdrawForm" (ngSubmit)=onSubmitWithdrawForm(withdrawForm.value) novalidate>
+          <div class="inner">
+            <div class="row">
+
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 widPad">
+                <mat-form-field class="full-width">
+                  <input type="number" matInput placeholder="{{ 'Amount' | translate }}" formControlName="mod_user_withdraw_amt">
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <mat-form-field class="full-width">
+                  <input type="text" matInput placeholder="{{ 'Remarks' | translate }}" formControlName="mod_user_withdral_remark">
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <ng-select [options]="cashwithdrawList" [(ngModel)]="mod_withdraw" formControlName="mod_user_cash_withdraw" class="full-width"
+                  placeholder="Choose Option"></ng-select>
+                <span class="errorMessage">Select any or default settlement a/c</span>
+              </div>
+
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button type="submit" [disabled]="!withdrawForm.valid || loading" class="btn btn-success withdrawButt full-width" mat-raised-button>{{ 'Withdraw' | translate }}
+                  <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>

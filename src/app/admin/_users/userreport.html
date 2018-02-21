@@ -1,0 +1,242 @@
+<div class="row adminReport">
+  <div class="loadingBg" *ngIf="loading">
+    <div class="loaderInner">
+      <img src="./assets/images/homeLoader.gif" />
+    </div>
+  </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ReportArea">
+    <ul class="gameTab userGameTab">
+      <li (click)="openTabs('profitLoss'); onSubmitReportPl('pl');" class="{{tabToggle['profitLoss'] ? 'active' : 'deactive'}}">{{ 'P&L' | translate }}</li>
+      <li (click)="openTabs('transactions'); onSubmitReportTxn('txn');" class="{{tabToggle['transactions'] ? 'active' : 'deactive'}}">{{ 'Txn' | translate }}</li>
+      <li (click)="openTabs('accountStatement'); onSubmitAccountStatementReport();" class="{{tabToggle['accountStatement'] ? 'active' : 'deactive'}}">{{ 'Running Balance' | translate }}</li>
+      <li (click)="openTabs('acst'); onSubmitStatusReport();" class="{{tabToggle['acst'] ? 'active' : 'deactive'}}">{{ 'Account Status' | translate }}</li>
+      <li (click)="openTabs('credit_adjust'); onSubmitBalanceReport();" class="{{tabToggle['credit_adjust'] ? 'active' : 'deactive'}}">{{ 'Balance Sheet' | translate }}</li>
+    </ul>
+
+    <!-- Profit Loss -->
+    <div *ngIf="tabToggle['profitLoss']" class="userReport {{tabToggle['profitLoss'] ? 'active' : 'deactive'}}">
+
+      <ng-template #customCellTemplate let-day="day" let-locale="locale">
+        <div *ngIf="day.events[0]" class="cal-cell-top {{(day.events[0].title < 0) ? 'positive' : 'negative'}}">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+          <span *ngIf="day.events[0].title < 0" class="cal-day-badgeUp">{{ (-1*day.events[0].title).toFixed(2)}}</span>
+          <span *ngIf="day.events[0].title >= 0" class="cal-day-badge">{{ (day.events[0].title).toFixed(2)}}</span>
+        </div>
+
+        <div *ngIf="!day.events[0]" class="cal-cell-top">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+        </div>
+
+      </ng-template>
+
+      <div class="row text-center frReport">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 totalAmount">
+          <span class="dateTxt">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
+          <span *ngIf="plReportTotal < 0" class="totalPrice">Total :
+            <span class="positive">{{-1*plReportTotal.toFixed(2)}}</span>
+          </span>
+          <span *ngIf="plReportTotal >= 0" class="totalPrice">Total :
+            <span class="negative">{{(plReportTotal).toFixed(2)}}</span>
+          </span>
+
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 tabletab">
+          <div class="btn-group mobLeft pull-right">
+            <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" (click)="onSubmitReportPlNextPre('pl')" [(viewDate)]="viewDate">
+              Pre
+            </div>
+            <div class="btn btn-outline-secondary" mwlCalendarToday (click)="onSubmitReportPl('pl')" [(viewDate)]="viewDate">
+              Today
+            </div>
+            <div *ngIf="removeNext" class="btn btn-primary" mwlCalendarNextView [view]="view" (click)="onSubmitReportPlNextPre('pl')"
+              [(viewDate)]="viewDate">
+              Next
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reporttable userRt" [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [cellTemplate]="customCellTemplate" [viewDate]="viewDate" [events]="events"
+          [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day);">
+        </mwl-calendar-month-view>
+      </div>
+
+    </div>
+
+    <!-- Transactions -->
+    <div *ngIf="tabToggle['transactions']" class="userReport {{tabToggle['transactions'] ? 'active' : 'deactive'}}">
+
+      <ng-template #customCellTemplate let-day="day" let-locale="locale">
+        <div *ngIf="day.events[0]" class="cal-cell-top {{(day.events[0].title >= 0) ? 'positive' : 'negative'}}">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+          <span *ngIf="day.events[0].title >= 0" class="cal-day-badgeUp">{{ (day.events[0].title).toFixed(2)}}</span>
+          <span *ngIf="day.events[0].title < 0" class="cal-day-badge">{{ (-1*day.events[0].title).toFixed(2)}}</span>
+        </div>
+
+        <div *ngIf="!day.events[0]" class="cal-cell-top">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+        </div>
+
+      </ng-template>
+
+      <div class="row text-center frReport">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 totalAmount">
+          <span class="dateTxt">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
+          <span *ngIf="plReportTotal >= 0" class="totalPrice">Total :
+            <span class="positive">{{plReportTotal.toFixed(2)}}</span>
+          </span>
+          <span *ngIf="plReportTotal < 0" class="totalPrice">Total :
+            <span class="negative">{{(-1*plReportTotal).toFixed(2)}}</span>
+          </span>
+
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 tabletab">
+          <div class="btn-group mobLeft pull-right">
+            <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" (click)="onSubmitReportPlNextPre('txn')" [(viewDate)]="viewDate">
+              Pre
+            </div>
+            <div class="btn btn-outline-secondary" mwlCalendarToday (click)="onSubmitReportTxn('txn')" [(viewDate)]="viewDate">
+              Today
+            </div>
+            <div *ngIf="removeNext" class="btn btn-primary" mwlCalendarNextView [view]="view" (click)="onSubmitReportPlNextPre('txn')"
+              [(viewDate)]="viewDate">
+              Next
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reporttable userRt" [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [cellTemplate]="customCellTemplate" [viewDate]="viewDate" [events]="events"
+          [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day);">
+        </mwl-calendar-month-view>
+      </div>
+
+
+    </div>
+
+    <!-- Running Balance -->
+    <div *ngIf="tabToggle['accountStatement']" class="{{tabToggle['accountStatement'] ? 'active' : 'deactive'}}">
+
+      <ng-template #customCellTemplate let-day="day" let-locale="locale">
+        <div *ngIf="day.events[0]" class="cal-cell-top">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+          <!-- <span *ngIf="day.events[0].title >= 0" class="cal-day-badge">{{ (day.events[0].title).toFixed(2)}}</span> -->
+          <!-- <span class="cal-day-badgeUp">O:{{ (day.events[0].meta[0].balance)}}</span>
+          <span class="cal-day-badge">C:{{ (day.events[0].title)}}</span> -->
+          <span class="cal-day-open">Opening</span>
+          <span class="cal-day-badgeUp">{{ (day.events[0].meta[0].balance)}}</span>
+          <span class="cal-day-close">Closing</span>
+          <span class="cal-day-badge">{{(day.events[0].title)}}</span>
+        </div>
+
+        <div *ngIf="!day.events[0]" class="cal-cell-top">
+          <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+        </div>
+
+      </ng-template>
+
+      <div class="row text-center frReport">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 totalAmount">
+          <span class="dateTxt">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</span>
+          <span *ngIf="plReportTotal >= 0" class="totalPrice">Current Balance :
+            <span class="positive">{{plReportTotal.toFixed(2)}}</span>
+          </span>
+          <span *ngIf="plReportTotal < 0" class="totalPrice">Current Balance :
+            <span class="negative">{{(plReportTotal).toFixed(2)}}</span>
+          </span>
+
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 tabletab">
+          <div class="btn-group mobLeft pull-right">
+            <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+              Pre
+            </div>
+            <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+              Today
+            </div>
+            <div *ngIf="removeNext" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+              Next
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reporttable userRt" [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [cellTemplate]="customCellTemplate" [viewDate]="viewDate" [events]="events"
+          [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day);">
+        </mwl-calendar-month-view>
+      </div>
+
+    </div>
+
+    <!-- Account Status -->
+    <div class="inner" *ngIf="tabToggle['acst']" class="{{tabToggle['acst'] ? 'active' : 'deactive'}}">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 dtTable">
+
+          <ng2-smart-table [settings]="statusSettings" [source]="statusReport"></ng2-smart-table>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Balance Sheet -->
+    <div class="inner" *ngIf="tabToggle['credit_adjust']" class="{{tabToggle['credit_adjust'] ? 'active' : 'deactive'}}">
+
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 blanceReport">
+          <table class="userBlsTbl" border="0" cellpadding="0" cellspacing="0" width="100%" *ngIf="balanceReport">
+            <thead>
+              <tr>
+                <th width="35%">{{ 'User Name' | translate }}</th>
+                <th width="15%">{{ 'Credit' | translate }}</th>
+                <th width="35%">{{ 'User Name' | translate }}</th>
+                <th width="15%">{{ 'Debit' | translate }}</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <div id="style-6" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 blanceReport scrollbar adReport">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" *ngIf="balanceReport">
+            <tbody>
+              <tr class="{{(i%2) ? 'odd' : 'even'}}" *ngFor="let item of balanceReport[balanceReport.totalCal]; let i = index;">
+                <td width="35%">
+                  <span *ngIf="balanceReport.Credit[i] && balanceReport.Credit[i].parent_id != 1" class="pull-right" matTooltip="Withdraw" (click)="openModal(templateBalance); parentId=balanceReport.Credit[i].parent_id; userId=balanceReport.Credit[i].user_id; userName=balanceReport.Credit[i].username; type='withdraw'">W</span> {{balanceReport.Credit[i] ? balanceReport.Credit[i].username : ''}}</td>
+                <td width="15%" class="text-right positive">{{balanceReport.Credit[i] ? balanceReport.Credit[i].amount.toFixed(2) : ''}}
+                </td>
+                <td width="35%">
+                  <span *ngIf="balanceReport.Debit[i] && balanceReport.Debit[i].parent_id != 1" class="pull-right" matTooltip="Deposit" (click)="openModal(templateBalance); parentId=balanceReport.Debit[i].parent_id; userId=balanceReport.Debit[i].user_id; userName=balanceReport.Debit[i].username; type='deposit'">D</span> {{balanceReport.Debit[i] ? balanceReport.Debit[i].username : ''}}</td>
+                <td width="15%" class="text-right negative">{{balanceReport.Debit[i] ? balanceReport.Debit[i].amount.toFixed(2) : ''}}</td>
+              </tr>
+              <tr>
+                <td width="35%">Total</td>
+                <td width="15%" class="text-right positive">{{balanceReport.Tcredit.toFixed(2)}}</td>
+                <td width="35%">Total</td>
+                <td width="15%" class="text-right negative">{{balanceReport.Tdebit.toFixed(2)}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      <!-- Admin Option Template -->
+      <ng-template #templateBalance>
+        <div class="header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </button>
+          <h4>{{ 'Settlement' | translate }}</h4>
+        </div>
+        <div class="modal-body optionSection">
+          <admin-balance [userId]="userId" [type]="type" [parentId]="parentId"></admin-balance>
+        </div>
+      </ng-template>
+
+
+
+    </div>
+
+  </div>
+</div>

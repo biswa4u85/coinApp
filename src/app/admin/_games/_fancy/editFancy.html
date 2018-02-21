@@ -1,0 +1,171 @@
+<!-- Score Fancy -->
+<div *ngIf="currentGame.game_type == '-2'">
+  <form [formGroup]="scoreFancyForm" (ngSubmit)=onSubmitscoreFancyForm(scoreFancyForm.value) novalidate>
+    <input type="hidden" placeholder="{{ 'Event Type' | translate }}" formControlName="type">
+    <div class="inner">
+      <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="{{ 'Enter Max Bets' | translate }}" formControlName="enterBets">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <button type="submit" [disabled]="!scoreFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Range Fancy -->
+<div *ngIf="currentGame.game_type == '-4'">
+
+  <form [formGroup]="rangeFancyForm" (ngSubmit)=onSubmitrangeFancyForm(rangeFancyForm.value) novalidate>
+
+    <input type="hidden" placeholder="{{ 'Event Type' | translate }}" formControlName="type">
+    <div class="inner">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="{{ 'Enter Range' | translate }}" formControlName="enterBets">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-2">
+          <button type="submit" [disabled]="!rangeFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+<!-- Score Number Fancy -->
+<div *ngIf="currentGame.game_type == '-7'">
+
+  <form [formGroup]="rangeFancyForm" (ngSubmit)=onSubmitScoreNumberForm(rangeFancyForm.value) novalidate>
+
+    <input type="hidden" placeholder="{{ 'Event Type' | translate }}" formControlName="type">
+    <div class="inner">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="{{ 'Enter Payout' | translate }}" formControlName="enterBets">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-2">
+          <button type="submit" [disabled]="!rangeFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- Odd/Even Fancy -->
+<div *ngIf="currentGame.game_type == '-5'">
+
+  <form [formGroup]="rangeFancyForm" (ngSubmit)=onSubmitOddEvenForm(rangeFancyForm.value) novalidate>
+
+    <input type="hidden" placeholder="{{ 'Event Type' | translate }}" formControlName="type">
+    <div class="inner">
+      <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="{{ 'Enter Payout' | translate }}" formControlName="enterBets">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <button type="submit" [disabled]="!rangeFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- Manual Fancy Fancy -->
+<div *ngIf="currentGame.game_type == '-8'">
+  <form [formGroup]="manualFancyForm" (ngSubmit)=onSubmitManualFancyForm(manualFancyForm.value) novalidate>
+
+    <div class="inner">
+      <div class="row">
+
+        <div class="col-lg-12" *ngFor="let itom of manualFancyForm.controls.enterBets.controls; let i=index">
+          <input type="hidden" placeholder="{{ 'Id' | translate }}" value="{{i}}" [formControl]="itom.controls.id">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <mat-form-field class="full-width">
+                <input type="text" [readonly]="true" matInput placeholder="{{ 'Enter Runner' | translate }}" [formControl]="itom.controls.name">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 back">
+              <mat-form-field class="full-width price">
+                <input type="text" matInput placeholder="{{ 'Price' | translate }}" [formControl]="itom.controls.backPrice">
+              </mat-form-field>
+              <mat-form-field class="full-width price">
+                <input type="text" matInput placeholder="{{ 'Amount' | translate }}" [formControl]="itom.controls.backAmount">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 lay">
+              <mat-form-field class="full-width price">
+                <input type="text" matInput placeholder="{{ 'Price' | translate }}" [formControl]="itom.controls.layPrice">
+              </mat-form-field>
+              <mat-form-field class="full-width price">
+                <input type="text" matInput placeholder="{{ 'Amount' | translate }}" [formControl]="itom.controls.layAmount">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <button type="submit" [disabled]="!manualFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- Setting Fancy -->
+<div class="fancySett">
+  <form [formGroup]="settingFancyForm" (ngSubmit)=onSubmitsettingFancyForm(settingFancyForm.value) novalidate>
+    <input type="hidden" placeholder="{{ 'Event Type' | translate }}" formControlName="type">
+    <div class="inner">
+      <div class="row">
+        <div class="col-lg-12">
+          <mat-select placeholder="Select Setting" (change)="changeSelectedVal(settingFancyForm.value)" formControlName="opt" class="full-width">
+            <mat-option value="wincom">{{ 'Commission' | translate }}</mat-option>
+            <mat-option value="min_stake">{{ 'Min Stake' | translate }}</mat-option>
+            <mat-option value="max_stake">{{ 'Max Stake' | translate }}</mat-option>
+            <mat-option value="max_profit">{{ 'Max Profit' | translate }}</mat-option>
+            <mat-option value="bet_delay">{{ 'Bet Delay' | translate }}</mat-option>
+            <mat-option value="system_status">{{ 'Lock Bets' | translate }}</mat-option>
+          </mat-select>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="{{ 'Enter Value' | translate }}" formControlName="val">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-2">
+          <button type="submit" [disabled]="!settingFancyForm.valid || loading" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }} <img *ngIf="loading" class="loading" src="../../assets/images/loader.gif"
+              /></button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+      <button type="button" (click)="fancyStatus(3)" class="btn btn-success full-width" mat-raised-button>{{ 'Close Game' | translate }}</button>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-2">
+      <button type="button" (click)="updRangeFancyStatus(currentFancyStatus)" class="btn btn-success full-width" mat-raised-button>{{currentFancyStatus == 3 ? 'Suspended' : 'Active'}}</button>
+    </div>
+  </div>
+
+</div>

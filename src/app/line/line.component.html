@@ -1,0 +1,61 @@
+<!-- {{allGames | json}} -->
+<div class="lineBoardBg scrollbar" id="style-6">
+  <div class="lineBoard">
+    <div *ngFor="let mItem of allGames | unique:'event_id'">
+      <div class="panel-title">{{mItem.event_name}}</div>
+      <ul class="lineBoardBody">
+        <li *ngFor="let item of allGames | filterBy: { event_id: mItem.event_id }; let i = index">
+          <span class="teamName">{{item.market_name}}</span>
+          <div class="listBox">
+            <div class="form-group">
+              <mat-select placeholder="Choose Option" (change)="updateGame(selectGame[item.game_id], item.game_id)" [(ngModel)]="selectGame[item.game_id]"
+                class="full-width">
+                <mat-option value="1">{{ 'Enable' | translate }}</mat-option>
+                <mat-option value="0">{{ 'Disable' | translate }}</mat-option>
+                <mat-option value="2">{{ 'Close' | translate }}</mat-option>
+                <mat-option (click)="openModal(template); gId=item.game_id;  sellId=item.game_id" value="result">{{ 'Result' | translate }}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Option Template -->
+<ng-template #template>
+  <div class="header">
+    <button matTooltip="Close" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <mat-icon aria-hidden="true">close</mat-icon>
+    </button>
+    <h4>{{ 'Result' | translate }}</h4>
+  </div>
+  <div class="modal-body optionSection">
+    <form [formGroup]="resultForm" (ngSubmit)=onSubmitResultForm(resultForm.value,gId,sellId) novalidate>
+      <div class="row">
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 dropInput">
+          <mat-form-field class="full-width">
+            <input type="number" matInput placeholder="{{ 'Enter Winner' | translate }}" formControlName="winner">
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 dropInput">
+          <mat-form-field class="full-width">
+            <input type="password" matInput placeholder="{{ 'Password' | translate }}" formControlName="password">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 dropInput">
+          <a class="cancelButt" (click)="modalRef.hide()">Cancel</a>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+          <button type="submit" [disabled]="!resultForm.valid" class="btn btn-success full-width" mat-raised-button>{{ 'Submit' | translate }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
