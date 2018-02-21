@@ -9,6 +9,7 @@ import { Ng2DeviceService } from "ng2-device-detector"
 
 @Component({
     selector: "app-password",
+    styleUrls: ["./login.component.scss"],
     templateUrl: "./password.component.html"
 })
 export class PasswordComponent implements OnInit {
@@ -25,6 +26,11 @@ export class PasswordComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+
+        let userDetails = JSON.parse(this.sessionStore.retrieve("userDetails"))
+        if (userDetails) {
+            this.router.navigate(['/dashboard'])
+        }
 
         // Set Preference Value
         if (!localStorage.getItem("preferenceVal")) {
@@ -45,23 +51,16 @@ export class PasswordComponent implements OnInit {
         localStorage.setItem("preferenceVal", JSON.stringify(preferenceVal))
 
         this.loginForm = new FormGroup({
-            username: new FormControl("", Validators.required),
+            email: new FormControl("", Validators.required),
             password: new FormControl()
         })
     }
 
     onSubmit(form: any) {
-        // this.loginService.adminLogin(form).subscribe(data => {
-        //     console.log(data)
-        //     if (data.status == 1) {
-        //         console.log(data)
-        //     } else {
-        //         this.snackBar.open(data.error, undefined, {
-        //             duration: 3000,
-        //             extraClasses: ["alert-danger"]
-        //         })
-        //         this.loading = false;
-        //     }
-        // })
+        this.loading = false
+        this.loginService.adminLogin(form).then((data: any) => {
+            this.router.navigate(['/dashboard'])
+            this.loading = true
+        }).catch(err => console.log(err))
     }
 }

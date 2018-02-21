@@ -9,6 +9,7 @@ import { Ng2DeviceService } from "ng2-device-detector"
 
 @Component({
   selector: "app-login",
+  styleUrls: ["./login.component.scss"],
   templateUrl: "./login.component.html"
 })
 export class LoginComponent implements OnInit {
