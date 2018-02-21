@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core"
-import { LoginService, LibraryService } from "../_services/index"
+import { LoginService } from "../_services/index"
 import { Router } from "@angular/router"
 
 @Component({
@@ -8,6 +8,7 @@ import { Router } from "@angular/router"
 })
 export class HeaderComponent implements OnInit {
     constructor(
+        public loginService: LoginService,
     ) { }
 
     public ngOnInit() {
