@@ -1,4 +1,6 @@
 ﻿export * from './header.component'
+export * from './nav.component'
 export * from './footer.component'
 export * from './home.component'
 export * from './portfolio.component'
+export * from './watchlist.component'
