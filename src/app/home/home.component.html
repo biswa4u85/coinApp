@@ -1,57 +1,22 @@
-<!--Header-part-->
-<div id="header">
-  <h1>
-    <a href="dashboard.html">Crypto Koins</a>
-  </h1>
-</div>
-<!--close-Header-part-->
-<!--top-Header-menu-->
-<div id="user-nav" class="navbar navbar-inverse">
-  <ul class="nav">
-    <li class="dropdown" id="profile-messages">
-      <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle">
-        <i class="icon icon-user"></i>
-        <span class="text">Welcome User</span>
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <li class="divider"></li>
-        <li>
-          <a href="settings.html">
-            <i class="icon icon-cog"></i>Settings</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a (click)="loginService.logout()">
-            <i class="icon-key"></i> Log Out</a>
-        </li>
-      </ul>
-    </li>
-    <li>
-      <a routerLink="/login">
-        <i class="icon-user"></i>Login / Register</a>
-    </li>
-  </ul>
-</div>
-<!--sidebar-menu-->
+<app-header></app-header>
 <div id="content">
   <div class="row-fluid">
     <div class="quick-actions_homepage">
       <ul class="quick-actions">
         <li class="">
-          <a href="#">
+          <a routerLink="/dashboard">
             <i class="icon-dashboard"></i> Dashboard </a>
         </li>
         <li class="">
-          <a href="#">
+          <a routerLink="/dashboard">
             <i class="icon-refresh"></i> Refresh</a>
         </li>
         <li class="">
-          <a href="watchlist.html">
+          <a routerLink="/dashboard">
             <i class="icon-heart"></i> Watchlist </a>
         </li>
         <li class="">
-          <a href="portfolio.html">
+          <a routerLink="/portfolio">
             <i class="icon-briefcase"></i> Portfolio </a>
         </li>
         <li class="">
@@ -238,19 +203,4 @@
     </div>
   </div>
 </div>
-<!--Footer-part-->
-<div class="row-fluid">
-  <div id="footer">
-    <div class="span4">2018 &copy; Cryptokoins.net</div>
-    <div class="span4">
-      <a href="#">Facebook</a> -
-      <a href="#">Twitter</a>
-    </div>
-    <div class="span4">
-      <a href="#">Home</a> -
-      <a href="#">Contact</a> -
-      <a href="#">Add Coin</a>
-    </div>
-  </div>
-</div>
-<!--end-Footer-part-->
+<app-footer></app-footer>

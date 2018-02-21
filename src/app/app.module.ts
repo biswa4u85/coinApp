@@ -42,7 +42,7 @@ import { LoginService, GoogleDriveProvider, LibraryService } from "./_services/i
 import { AppComponent } from "./app.component";
 
 import { LoginComponent, RegisterComponent, PasswordComponent } from "./login/index"
-import { HomeComponent } from "./home/home.component";
+import { HeaderComponent, FooterComponent, HomeComponent, PortfolioComponent } from "./home/index";
 
 
 const appRoutes: Routes = [
@@ -50,7 +50,7 @@ const appRoutes: Routes = [
   { path: "register", component: RegisterComponent },
   { path: "password", component: PasswordComponent },
   { path: "dashboard", component: HomeComponent },
-  { path: "profile", component: HomeComponent, canActivate: [AuthGuard] },
+  { path: "portfolio", component: PortfolioComponent, canActivate: [AuthGuard] },
   { path: "", component: HomeComponent },
   { path: "**", redirectTo: "" }
 ];
@@ -61,7 +61,10 @@ const appRoutes: Routes = [
     LoginComponent,
     RegisterComponent,
     PasswordComponent,
+    HeaderComponent,
+    FooterComponent,
     HomeComponent,
+    PortfolioComponent,
     KeysPipe,
     inPlayFilterPipe,
     ReversePipe,
