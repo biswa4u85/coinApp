@@ -34,119 +34,38 @@ import { Ng2DeviceDetectorModule } from "ng2-device-detector";
 import { Ng2FilterPipeModule } from "ng2-filter-pipe";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { CalendarModule } from "angular-calendar";
-// import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { KeysPipe, inPlayFilterPipe, ReversePipe, utcFilterPipe } from "./_pipe/index";
-import { AuthGuard, AdminGuard } from "./_guards/index";
-import { VarDirective } from "./_directives/index";
-import { LangPipe } from "./_language/index";
+import { AuthGuard } from "./_guards/index"
 
-import {
-  LoginService,
-  HomeService,
-  AdminService,
-  BoardService,
-  LibraryService
-} from "./_services/index";
+import { LoginService, GoogleDriveProvider, LibraryService } from "./_services/index";
 import { AppComponent } from "./app.component";
-import { LoginComponent, TermsDialog } from "./login/login.component";
-import { HomeComponent } from "./home/home.component";
-import { AdminComponent } from "./admin/admin.component";
-import {
-  GamesComponent,
-  LivescoreComponent,
-  SocketComponent,
-  FancySocketComponent,
-  SliderComponent,
-  BetComponent,
-  BookComponent
-} from "./home/_games/index";
-import { ReportComponent } from "./home/_reports/report";
-import { CustomEventTitleFormatter } from "./home/_reports/custom-event-title-formatter.provider";
-import { OptionsComponent } from "./home/_options/options";
-import { MybetsComponent } from "./home/_mybets/mybets";
-import { SettingComponent } from "./admin/_settings/settings";
-import {
-  FancyComponent,
-  EditFancyComponent
-} from "./admin/_games/_fancy/index";
-import { UserComponent, UserReportComponent } from "./admin/_users/index";
-import {
-  AdminReportComponent,
-  AdminBalanceComponent
-} from "./admin/_reports/index";
-import {
-  AdminGamesComponent,
-  AdminSocketComponent,
-  LineAdminSocketComponent,
-  AdminBookComponent
-} from "./admin/_games/index";
-import { KeyboardComponent } from "./home/_keyboard/keyboard";
-import { LineComponent } from "./line/line.component";
-import { AddFancyComponent } from "./fancy/fancy.component";
 
-import { BoardComponent } from "./board/board.component";
-import { BoardAdminComponent } from "./admin/_games/_board/board";
+import { LoginComponent, RegisterComponent, PasswordComponent } from "./login/index"
+import { HomeComponent } from "./home/home.component";
+
 
 const appRoutes: Routes = [
-  { path: "line", component: LoginComponent },
-  { path: "lineboard", component: LineComponent, canActivate: [AdminGuard] },
-  { path: "fancy", component: LoginComponent },
-  { path: "fancyboard", component: AddFancyComponent, canActivate: [AdminGuard] },
   { path: "login", component: LoginComponent },
-  { path: "admin", component: LoginComponent },
-  { path: "dashboard", component: AdminComponent, canActivate: [AdminGuard] },
-  { path: "board", component: LoginComponent },
-  { path: "adminboard", component: BoardComponent, canActivate: [AdminGuard] },
-  {
-    path: "keyboard",
-    component: BoardAdminComponent,
-    canActivate: [AdminGuard]
-  },
-  { path: "", component: HomeComponent, canActivate: [AuthGuard] },
+  { path: "register", component: RegisterComponent },
+  { path: "password", component: PasswordComponent },
+  { path: "dashboard", component: HomeComponent },
+  { path: "profile", component: HomeComponent, canActivate: [AuthGuard] },
+  { path: "", component: HomeComponent },
   { path: "**", redirectTo: "" }
 ];
 
 @NgModule({
   declarations: [
-    LangPipe,
     AppComponent,
     LoginComponent,
-    TermsDialog,
+    RegisterComponent,
+    PasswordComponent,
     HomeComponent,
-    AdminComponent,
-    GamesComponent,
-    LivescoreComponent,
-    SocketComponent,
-    FancySocketComponent,
-    BetComponent,
-    BookComponent,
-    SliderComponent,
-    BoardComponent,
-    BoardAdminComponent,
-    ReportComponent,
-    OptionsComponent,
-    MybetsComponent,
-    SettingComponent,
-    FancyComponent,
-    EditFancyComponent,
-    UserComponent,
-    UserReportComponent,
-    AdminReportComponent,
-    AdminBalanceComponent,
-    AdminGamesComponent,
-    AdminBookComponent,
-    AdminSocketComponent,
-    LineAdminSocketComponent,
-    KeyboardComponent,
     KeysPipe,
     inPlayFilterPipe,
     ReversePipe,
-    utcFilterPipe,
-    VarDirective,
-    LineComponent,
-    AddFancyComponent,
-    BoardComponent
+    utcFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -187,15 +106,10 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthGuard,
-    AdminGuard,
     LoginService,
-    HomeService,
-    AdminService,
-    BoardService,
+    GoogleDriveProvider,
     LibraryService
-    // CookieService
   ],
-  entryComponents: [TermsDialog],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

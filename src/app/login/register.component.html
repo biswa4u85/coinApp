@@ -1,0 +1,59 @@
+<div id="loginbox">
+    <form class="form-vertical" [formGroup]="loginForm" (ngSubmit)=onSubmit(loginForm.value) novalidate>
+        <div class="control-group normal_text">
+            <h3>
+                <img src="assets/img/logo.png" alt="Logo" />
+            </h3>
+        </div>
+        <h1>Register now to watch the live market</h1>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_lg">
+                        <i class="icon-user"> </i>
+                    </span>
+                    <input type="text" formControlName="fullName" placeholder="Full Name" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_lg">
+                        <i class="icon-envelope"> </i>
+                    </span>
+                    <input type="email" formControlName="email" placeholder="Email" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_ly">
+                        <i class="icon-lock"></i>
+                    </span>
+                    <input type="password" formControlName="password" placeholder="Password" />
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_ly">
+                        <i class="icon-lock"></i>
+                    </span>
+                    <input type="password" formControlName="conPassword" placeholder="Confirm Password" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <span class="pull-left">
+                <a routerLink="/login" class="flip-link btn btn-success" id="to-login">Back to Login </a>
+            </span>
+            <span class="pull-right">
+                <button type="submit" [disabled]="!loginForm.valid || loading" class="btn btn-success full-width">Register</button>
+            </span>
+        </div>
+    </form>
+</div>
