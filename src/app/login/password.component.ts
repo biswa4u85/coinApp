@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core"
 import { FormControl, FormGroup, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 
-import { LoginService } from "../_services/index"
+import { LoginService, LibraryService } from "../_services/index"
 import { MatSnackBar } from "@angular/material"
 import { SessionStorageService } from "ngx-webstorage"
 import { Ng2DeviceService } from "ng2-device-detector"
@@ -22,6 +22,7 @@ export class PasswordComponent implements OnInit {
         private deviceService: Ng2DeviceService,
         private sessionStore: SessionStorageService,
         private loginService: LoginService,
+        private libraryService: LibraryService,
         public snackBar: MatSnackBar,
     ) { }
 
@@ -51,16 +52,23 @@ export class PasswordComponent implements OnInit {
         localStorage.setItem("preferenceVal", JSON.stringify(preferenceVal))
 
         this.loginForm = new FormGroup({
-            email: new FormControl("", Validators.required),
-            password: new FormControl()
+            email: new FormControl("", Validators.required)
         })
     }
 
     onSubmit(form: any) {
         this.loading = false
-        this.loginService.adminLogin(form).then((data: any) => {
-            this.router.navigate(['/dashboard'])
+        let option = { email: form.email }
+        this.loginService.getUsers(form).subscribe(data => {
+            for (let item of data) {
+                if (item.email == option.email) {
+                    let password = this.libraryService.dncVal(item.password)
+                    console.log(password)
+                    this.router.navigate(['/login'])
+                }
+            }
             this.loading = true
-        }).catch(err => console.log(err))
+        })
+
     }
 }

@@ -2,10 +2,11 @@ import { Component, OnInit, Inject } from "@angular/core"
 import { FormControl, FormGroup, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 
-import { LoginService } from "../_services/index"
+import { LoginService, LibraryService } from "../_services/index"
 import { MatSnackBar } from "@angular/material"
 import { SessionStorageService } from "ngx-webstorage"
 import { Ng2DeviceService } from "ng2-device-detector"
+import { Users } from '../_interface'
 
 @Component({
   selector: "app-login",
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     private deviceService: Ng2DeviceService,
     private sessionStore: SessionStorageService,
     private loginService: LoginService,
+    private libraryService: LibraryService,
     public snackBar: MatSnackBar,
   ) { }
 
@@ -52,15 +54,22 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = new FormGroup({
       email: new FormControl("", Validators.required),
-      password: new FormControl()
+      password: new FormControl("", Validators.required)
     })
   }
 
   onSubmit(form: any) {
     this.loading = false
-    this.loginService.adminLogin(form).then((data: any) => {
-      this.router.navigate(['/dashboard'])
+    let password = this.libraryService.encVal(form.password)
+    let option = { email: form.email, password: password, status: 1 }
+    this.loginService.getUsers(form).subscribe(data => {
+      for (let item of data) {
+        if (item.email == option.email && item.password == option.password && item.status == option.status) {
+          this.sessionStore.store("userDetails", JSON.stringify(item));
+          console.log(item)
+        }
+      }
       this.loading = true
-    }).catch(err => console.log(err))
+    })
   }
 }

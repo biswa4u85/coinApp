@@ -51,16 +51,16 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem("preferenceVal", JSON.stringify(preferenceVal))
 
         this.loginForm = new FormGroup({
+            fullName: new FormControl("", Validators.required),
             email: new FormControl("", Validators.required),
-            password: new FormControl()
+            password: new FormControl("", Validators.required),
+            conPassword: new FormControl("", Validators.required)
         })
     }
 
     onSubmit(form: any) {
-        this.loading = false
-        this.loginService.adminLogin(form).then((data: any) => {
-            this.router.navigate(['/dashboard'])
-            this.loading = true
-        }).catch(err => console.log(err))
+        this.loginService.addUsers(form).subscribe(data => {
+            console.log(data)
+        })
     }
 }
